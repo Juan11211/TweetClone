@@ -1,24 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
+import * as yup from 'yup'
+import { Formik } from 'formik'
+import {useNavigate} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
+import {setLogin} from '../state/index'
+import axios from 'axios'
 
-function Form() {
-    return (
-      <div className="text-white">
-        <h2 className="text-xl font-bold mb-4">Sign Up</h2>
-        <input
-          className="border rounded-md p-2 mb-4 w-full"
-          type="email"
-          placeholder="Email"
-        />
-        <input
-          className="border rounded-md p-2 mb-4 w-full"
-          type="password"
-          placeholder="Password"
-        />
-        <button className="bg-purple-900 text-white py-2 px-4 rounded-md">
-          Sign Up
-        </button>
-      </div>
-    );
+const registerSchema = yup.object().shape({
+  firstName: yup.string().required('required'),
+  lastName: yup.string().required('required'),
+  email: yup.string().email('invalid email').required('required'),
+  password: yup.string().required('required'),
+  username: yup.string().required('required'),
+  //profilePicture: yup.string().required('required')
+})
+
+const loginSchema = yup.object().shape({
+  email: yup.string().email('invalid email').required('required'),
+  password: yup.string().required('required'),
+})
+
+const registerValue = yup.object().shape({
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  username: "",
+  //profilePicture: yup.string().required('required')
+})
+
+const loginValue = yup.object().shape({
+  email: "",
+  password: "",
+})
+
+const Form = () => {
+  const [pageType, setPageType] = useState('login'); 
+  const dispatch = useDispatch(); 
+  const navigate = useNavigate();
+  const isLogin = pageType === 'login';
+  const isRegister = pageType === 'register';
+
+  const register = async(values, onSubmitProps) => {
+    const formDa
   }
 
-export default Form
+
+}
