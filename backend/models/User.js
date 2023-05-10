@@ -26,11 +26,7 @@ const userSchema = new mongoose.Schema({
     profilePicture: {
         type: String
     }, 
-    followers: {
-        type: Array, 
-        default: []
-    },
-    following: {
+    friends: {
         type: Array, 
         default: []
     },
