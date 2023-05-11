@@ -8,11 +8,13 @@ import bodyParser from 'body-parser'
 import verifyToken from './middleware/verifyToken.js';
 import { expressjwt } from 'express-jwt';
 import postRouter from './routes/postRouter.js';
+import cors from 'cors'
 
 const app = express();
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 dotenv.config();
+app.use(cors());
 
 // connect to MongoDB
 async function connectToDatabase() {

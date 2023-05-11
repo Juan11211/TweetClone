@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { setLogin } from '../state';
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -18,12 +19,13 @@ const registerSchema = Yup.object().shape({
   password: Yup.string().required('Required'),
 });
 
-const Form = () => {
+const AuthForm = () => {
   const [pageType, setPageType] = useState('login');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogin = pageType === 'login';
   const isRegister = pageType === 'register';
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleSubmit = async (values) => {
     const endpoint = isLogin ? 'login' : 'register';
@@ -31,9 +33,10 @@ const Form = () => {
       const { data } = await axios.post(`http://localhost:9000/auth/${endpoint}`, values);
       const { user, token } = data;
       dispatch(setLogin({ user, token }));
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error(error);
+      setErrorMessage(error.response.data.msg)
     }
   };
 
@@ -51,43 +54,51 @@ const Form = () => {
   };
 
   return (
-    <div>
-      <h1>{isLogin ? 'Login' : 'Register'}</h1>
+    <div className='w-full lg:w-1/2 py-16 px-12'>
+      <h1 className='text-4xl dark:text-white font-bold text-center'>{isLogin ? 'Login' : 'Register'}</h1>
       <Formik
         initialValues={isLogin ? loginValue : registerValue}
         validationSchema={isLogin ? loginSchema : registerSchema}
         onSubmit={handleSubmit}
       >
         {({ errors, touched }) => (
-          <Form>
-            {isRegister && (
-              <>
-                <label htmlFor="firstName">First Name</label>
-                <Field type="text" name="firstName" />
-                <ErrorMessage name="firstName" />
-                <label htmlFor="lastName">Last Name</label>
-                <Field type="text" name="lastName" />
-                <ErrorMessage name="lastName" />
-                <label htmlFor="username">Username</label>
-                <Field type="text" name="username" />
-                <ErrorMessage name="username" />
-              </>
-            )}
-            <label htmlFor="email">Email</label>
-            <Field type="email" name="email" />
-            <ErrorMessage name="email" />
-            <label htmlFor="password">Password</label>
-            <Field type="password" name="password" />
-            <ErrorMessage name="password" />
-            <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
-            <button type="button" onClick={() => setPageType(isLogin ? 'register' : 'login')}>
-              {isLogin ? 'Create an account' : 'Already have an account? Login'}
-            </button>
+          <Form >
+            <div>
+              <div className='flex flex-col text-gray-400 py-2'>
+                {isRegister && (
+                  <>
+                    <label className='flex flex-col text-gray-400 py-2' htmlFor="firstName">First Name</label>
+                    <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="firstName" />
+                    <ErrorMessage name="firstName" />
+                    <label className='flex flex-col text-gray-400 py-2' htmlFor="lastName">Last Name</label>
+                    <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="lastName" />
+                    <ErrorMessage name="lastName" />
+                  </>
+                )}
+              </div>
+              <div className='flex flex-col text-gray-400 py-2'>                
+                <label className='flex flex-col text-gray-400 py-2' htmlFor="username">Username</label>
+                  <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="username" />
+                  <ErrorMessage name="username" />
+                <label className='flex flex-col text-gray-400 py-2' htmlFor="email">Email</label>
+                  <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="email" name="email" />
+                <ErrorMessage name="email" />
+                <label className='flex flex-col text-gray-400 py-2' htmlFor="password">Password</label>
+                <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="password" name="password" />
+                <ErrorMessage name="password" />
+                <button className='w-full my-5 py-2 bg-teal-500 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg' type="submit">{isLogin ? 'Login' : 'Register'}</button>
+                <button className='text-1xl dark:text-white font-bold text-center' type="button" onClick={() => setPageType(isLogin ? 'register' : 'login')}>
+                  {isLogin ? 'Create an account' : 'Already have an account?'}
+                </button>
+              </div>
+              {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+            </div>
           </Form>
         )}
       </Formik>
     </div>
   );
+  
 };
 
-export default Form;
+export default AuthForm;
