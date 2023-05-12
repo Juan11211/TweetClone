@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import userRoutes from '../backend/routes/userRoutes.js';
 import authRouter from './routes/authRouter.js';
 import bodyParser from 'body-parser'
-import verifyToken from './middleware/verifyToken.js';
 import { expressjwt } from 'express-jwt';
 import postRouter from './routes/postRouter.js';
 import cors from 'cors'
@@ -37,7 +36,7 @@ app.use((err, req, res, next) => {
     if(err.name === "UnauthorizedError"){
       res.status(err.status)
     }
-    return res.send({errMsg: err.message})
+    return res.send({msg: err.message})
   })
 
 app.listen(9000, () => {

@@ -38,7 +38,14 @@ function Navbar() {
 
     {/* LARGE SCREEN  */}
       <div className="hidden md:flex items-center">
-        <div className="mr-4 text-gray-200">Juan</div>
+      <div className="text-sm">
+            <div className="block mt-4 md:inline-block md:mt-0 text-gray-200 hover:text-white mr-4">
+              Home
+            </div>
+            <div className="block mt-4 md:inline-block md:mt-0 text-gray-200 hover:text-white mr-4">
+              Profile
+            </div>
+          </div>
         <button
           className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-gray-500 hover:bg-white"
           onClick={handleLogout} 

@@ -10,7 +10,7 @@ const initialState = {
 
 // Create the auth slice using createSlice from reduxjs/toolkit
 export const authSlice = createSlice({
-    name: 'auth', // The name of the slice
+    name: 'user', // The name of the slice
     initialState, // The initial state of the slice
     reducers: {
         // Set the mode to the opposite of what it currently is

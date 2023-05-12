@@ -17,13 +17,13 @@ export const register = async (req, res, next) => {
       // Check if email already exists in database
       const emailExists = await User.findOne({ email });
       if (emailExists) {
-        return res.status(400).json({ error: 'Email is already taken' });
+        return res.status(400).json({ msg: 'Email is already taken' });
       }
   
       // Check if username already exists in database
       const usernameExists = await User.findOne({ username });
       if (usernameExists) {
-        return res.status(400).json({ error: 'Username is already taken' });
+        return res.status(400).json({ msg: 'Username is already taken' });
       }
   
       const salt = await bcrypt.genSalt();

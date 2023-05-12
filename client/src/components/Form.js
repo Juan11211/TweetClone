@@ -19,7 +19,7 @@ const registerSchema = Yup.object().shape({
   password: Yup.string().required('Required'),
 });
 
-const AuthForm = () => {
+const AuthForm = ({ values }) => {
   const [pageType, setPageType] = useState('login');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,6 +43,7 @@ const AuthForm = () => {
   const loginValue = {
     email: '',
     password: '',
+    username: "",
   };
 
   const registerValue = {
@@ -68,23 +69,23 @@ const AuthForm = () => {
                 {isRegister && (
                   <>
                     <label className='flex flex-col text-gray-400 py-2' htmlFor="firstName">First Name</label>
-                    <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="firstName" />
+                    <Field value={values?.firstName} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="firstName" />
                     <ErrorMessage name="firstName" />
                     <label className='flex flex-col text-gray-400 py-2' htmlFor="lastName">Last Name</label>
-                    <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="lastName" />
+                    <Field value={values?.lastName} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="lastName" />
                     <ErrorMessage name="lastName" />
                   </>
                 )}
               </div>
               <div className='flex flex-col text-gray-400 py-2'>                
                 <label className='flex flex-col text-gray-400 py-2' htmlFor="username">Username</label>
-                  <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="username" />
+                  <Field  value={values?.username} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="username" />
                   <ErrorMessage name="username" />
                 <label className='flex flex-col text-gray-400 py-2' htmlFor="email">Email</label>
-                  <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="email" name="email" />
+                  <Field value={values?.email} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="email" name="email" />
                 <ErrorMessage name="email" />
                 <label className='flex flex-col text-gray-400 py-2' htmlFor="password">Password</label>
-                <Field className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="password" name="password" />
+                <Field value={values?.password} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="password" name="password" />
                 <ErrorMessage name="password" />
                 <button className='w-full my-5 py-2 bg-teal-500 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg' type="submit">{isLogin ? 'Login' : 'Register'}</button>
                 <button className='text-1xl dark:text-white font-bold text-center' type="button" onClick={() => setPageType(isLogin ? 'register' : 'login')}>
