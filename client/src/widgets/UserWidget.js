@@ -27,22 +27,24 @@ const UserWidget = ({ userId }) => {
   }, []);
 
   return (
-    <WidgetWrapper>
-    {/* FIRST ROW */}
-    <div class="flex justify-between items-center pb-1.1 cursor-pointer" onClick={() => navigate(`/profile/${userId}`)}>
-      <div class="flex gap-1">
-        <UserImage  />
-        <div>
-          <h4 class="font-medium text-gray-800 hover:text-primary-light">
-            {user?.firstName} {user?.lastName}
-          </h4>
-          <p class="text-gray-500">{user?.friends.length} friends</p>
-        </div>
+   <WidgetWrapper>
+  {/* FIRST ROW */}
+  <FlexBetween class="flex flex-col md:flex-row justify-between items-center pb-1.1 cursor-pointer" onClick={() => navigate(`/profile/${userId}`)}>
+    <FlexBetween class="flex gap-1 mb-2 md:mb-0">
+      <UserImage  />
+      <div className='text-center'>
+        <h4 className="text-lg ">
+          {user?.firstName} {user?.lastName}
+        </h4>
+        <p className="text-white">{user?.friends.length} friends</p>
       </div>
+    </FlexBetween>
+
+
       
-    </div>
-  
-    <div class="border-b"></div>
+    </FlexBetween>
+    
+    
   
     {/* SECOND ROW
     <div class="py-4">
@@ -56,7 +58,6 @@ const UserWidget = ({ userId }) => {
       </div>
     </div> */}
   
-    <div class="border-b"></div>
   
     {/* THIRD ROW
     <div class="py-4">
@@ -71,7 +72,6 @@ const UserWidget = ({ userId }) => {
     </div> */}
   
     <div class="border-b"></div>
-  
     {/* FOURTH ROW */}
     {/* <div class="py-4">
       <h2 class="text-primary-main font-medium mb-4">Social Profiles</h2>

@@ -10,7 +10,7 @@ export const getUser = async (req, res, next) => {
 };
 
 export const update = async (req, res, next) => {
-  if (req.params.id === req.user.id) {
+  if (req.params.id === req.auth.id) {
     try {
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
