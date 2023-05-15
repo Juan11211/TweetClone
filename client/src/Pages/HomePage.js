@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 
 function HomePage() {
-    const { id } = useSelector((state) => state.user || {}); // use an empty object as a fallback // coming from redux/store, NEEDED to use persist because kept signing me out.
+  const { id } = useSelector((state) => state.user || {}); // use an empty object as a fallback // coming from redux/store, NEEDED to use persist because kept signing me out.
   
   
   

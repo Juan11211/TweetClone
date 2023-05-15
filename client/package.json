@@ -18,7 +18,6 @@
     "react-scripts": "5.0.1",
     "react-scroll": "^1.8.9",
     "redux-persist": "^6.0.0",
-    "reveal-on-scroll-react": "^0.0.6",
     "web-vitals": "^2.1.4",
     "yup": "^1.1.1"
   },

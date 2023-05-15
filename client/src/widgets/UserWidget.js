@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,29 +8,31 @@ import UserImage from '../components/UserImage';
 
 const UserWidget = ({ userId }) => {
   const [user, setUser] = useState(null);
+  const 
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
 
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     try {
       const response = await axios.get(`/api/users/find/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(response.data);
     } catch (error) {
-      console.error(error);
+      next;
     }
-  };
-
+  }, [userId, token]);
+  
   useEffect(() => {
     getUser();
-  }, []);
+  }, [getUser]);
+  
 
   return (
    <WidgetWrapper>
   {/* FIRST ROW */}
-  <FlexBetween class="flex flex-col md:flex-row justify-between items-center pb-1.1 cursor-pointer" onClick={() => navigate(`/profile/${userId}`)}>
-    <FlexBetween class="flex gap-1 mb-2 md:mb-0">
+  <FlexBetween className="flex flex-col md:flex-row justify-between items-center pb-1.1 cursor-pointer" onClick={() => navigate(`/profile/${userId}`)}>
+    <FlexBetween className="flex gap-1 mb-2 md:mb-0">
       <UserImage  />
       <div className='text-center'>
         <h4 className="text-lg ">
@@ -71,7 +73,7 @@ const UserWidget = ({ userId }) => {
       </div>
     </div> */}
   
-    <div class="border-b"></div>
+    <div className="border-b"></div>
     {/* FOURTH ROW */}
     {/* <div class="py-4">
       <h2 class="text-primary-main font-medium mb-4">Social Profiles</h2>

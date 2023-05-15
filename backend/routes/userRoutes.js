@@ -1,8 +1,10 @@
 import express from 'express';
-import { deleteUser, getUser, update } from '../controllers/userController.js';
+import { deleteUser, getAllUsers, getUser, update } from '../controllers/userController.js';
 import verifyToken from '../middleware/verifyToken.js';
 
 const userRouter = express.Router();
+
+userRouter.get('/', getAllUsers);
 
 userRouter.get('/find/:id', getUser);
 
