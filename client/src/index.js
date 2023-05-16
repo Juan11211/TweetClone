@@ -17,10 +17,10 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
-import userReducer from './index.js';
+import { authSlice } from './state';
 
 const persistConfig = { key: "root", storage, version: 1 };
-const persistedReducer = persistReducer(persistConfig, userReducer);
+const persistedReducer = persistReducer(persistConfig, authSlice.reducer);
 
 const store = configureStore({
   reducer: persistedReducer,
@@ -37,11 +37,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistStore(store)}>
-          <App />
-        </PersistGate>
-      </Provider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistStore(store)}>
+        <App />
+      </PersistGate>
+    </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );
