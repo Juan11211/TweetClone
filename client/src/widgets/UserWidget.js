@@ -8,7 +8,7 @@ import UserImage from '../components/UserImage';
 
 const UserWidget = ({ userId }) => {
   const [user, setUser] = useState(null);
-  const 
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
 
@@ -19,7 +19,7 @@ const UserWidget = ({ userId }) => {
       });
       setUser(response.data);
     } catch (error) {
-      next;
+      setErrorMessage(error.response.data.msg)
     }
   }, [userId, token]);
   
