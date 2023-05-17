@@ -7,21 +7,25 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  tweetImage: {
+  picturePath: {
     type: String
   },
-  user: {
+  userPicturePath: {
+    type: String
+  },
+  user: { // userId, 
     type: Schema.Types.ObjectId,
     ref: "User",
- 
   }, 
   likes: {
-      type: Number,
-      default: 0
-    },
-  likers: { 
-      type: Array
-    }, 
+    type: Map, // if you like it, your going to add to this map. if you dont, you'll remove from the map.
+    of: Boolean // using a map rather than an array is much more efficent. 
+    // e.g. someone with 20k likes, its better to map. 
+},
+    comments: {
+      type: Array, 
+      default: []
+    }
 }, { timestamps: true });
 
 export default mongoose.model('Post', postSchema);

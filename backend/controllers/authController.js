@@ -11,7 +11,8 @@ export const register = async (req, res, next) => {
         email,
         username,
         password,
-        profilePicture
+        picturePath,
+        occupation 
       } = req.body;
   
       // Check if email already exists in database
@@ -35,7 +36,8 @@ export const register = async (req, res, next) => {
         email,
         username,
         password: passwordHash,
-        profilePicture,
+        picturePath,
+        occupation
       });
   
       const savedUser = await newUser.save();

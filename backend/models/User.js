@@ -23,14 +23,15 @@ const userSchema = new mongoose.Schema({
         type: String, 
         required: true, 
     }, 
-    profilePicture: {
-        type: String
+    picturePath: {
+        type: String,
+        default: ""
     }, 
     friends: {
         type: Array, 
         default: []
     },
-    description: {
+    occupation: {
         type: String
     }
 },

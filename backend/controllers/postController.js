@@ -28,8 +28,12 @@ export const createPost = async (req, res, next) => {
   try {
     const post = new Post({
       tweet: req.body.tweet,
-      tweetImage: req.body.tweetImage,
-      user: req.auth.id
+      picturePath: req.body.picturePath,
+      user: req.auth.id,
+      likes: {},
+      comments: [],
+      userPicturePath: user.picturePath
+
     });
 
     const savedPost = await post.save();
