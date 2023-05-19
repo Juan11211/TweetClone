@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { setLogin } from '../state';
+import { setLogin } from '../state/index.js'
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -17,6 +17,7 @@ const registerSchema = Yup.object().shape({
   username: Yup.string().required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
   password: Yup.string().required('Required'),
+  picture: Yup.mixed().required('Required'),
 });
 
 const AuthForm = ({ values }) => {
@@ -27,23 +28,33 @@ const AuthForm = ({ values }) => {
   const isRegister = pageType === 'register';
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { setFieldValue }) => {
     const endpoint = isLogin ? 'login' : 'register';
     try {
-      const { data } = await axios.post(`http://localhost:9000/auth/${endpoint}`, values);
+      const formData = new FormData();
+      for (let key in values) {
+        formData.append(key, values[key]);
+      }
+      formData.append('picturePath', values.picture?.name);
+
+      const { data } = await axios.post(`http://localhost:9000/auth/${endpoint}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       const { user, token } = data;
       dispatch(setLogin({ user, token }));
       navigate('/home');
     } catch (error) {
       console.error(error);
-      setErrorMessage(error.response.data.msg)
+      setErrorMessage(error.response.data.msg);
     }
   };
 
   const loginValue = {
     email: '',
     password: '',
-    username: "",
+    username: '',
   };
 
   const registerValue = {
@@ -52,6 +63,7 @@ const AuthForm = ({ values }) => {
     username: '',
     email: '',
     password: '',
+    picture: null,
   };
 
   return (
@@ -62,44 +74,97 @@ const AuthForm = ({ values }) => {
         validationSchema={isLogin ? loginSchema : registerSchema}
         onSubmit={handleSubmit}
       >
-        {({ errors, touched }) => (
-          <Form >
+        {({ errors, touched, setFieldValue }) => (
+          <Form>
             <div>
               <div className='flex flex-col text-gray-400 py-2'>
                 {isRegister && (
                   <>
-                    <label className='flex flex-col text-gray-400 py-2' htmlFor="firstName">First Name</label>
-                    <Field value={values?.firstName} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="firstName" />
-                    <ErrorMessage name="firstName" />
-                    <label className='flex flex-col text-gray-400 py-2' htmlFor="lastName">Last Name</label>
-                    <Field value={values?.lastName} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="lastName" />
-                    <ErrorMessage name="lastName" />
+                    <label className='flex flex-col text-gray-400 py-2' htmlFor='firstName'>
+                      First Name
+                    </label>
+                    <Field
+                      value={values?.firstName}
+                      className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none'
+                      type='text'
+                      name='firstName'
+                    />
+                    <ErrorMessage name='firstName' />
+                    <label className='flex flex-col text-gray-400 py-2' htmlFor='lastName'>
+                      Last Name
+                    </label>
+                    <Field
+                      value={values?.lastName}
+                      className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none'
+                      type='text'
+                      name='lastName'
+                    />
+                    <ErrorMessage name='lastName' />
                   </>
                 )}
               </div>
-              <div className='flex flex-col text-gray-400 py-2'>                
-                <label className='flex flex-col text-gray-400 py-2' htmlFor="username">Username</label>
-                  <Field  value={values?.username} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="text" name="username" />
-                  <ErrorMessage name="username" />
-                <label className='flex flex-col text-gray-400 py-2' htmlFor="email">Email</label>
-                  <Field value={values?.email} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="email" name="email" />
-                <ErrorMessage name="email" />
-                <label className='flex flex-col text-gray-400 py-2' htmlFor="password">Password</label>
-                <Field value={values?.password} className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none' type="password" name="password" />
-                <ErrorMessage name="password" />
-                <button className='w-full my-5 py-2 bg-teal-500 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg' type="submit">{isLogin ? 'Login' : 'Register'}</button>
-                <button className='text-1xl dark:text-white font-bold text-center' type="button" onClick={() => setPageType(isLogin ? 'register' : 'login')}>
+              <div className='flex flex-col text-gray-400 py-2'>
+                <label className='flex flex-col text-gray-400 py-2' htmlFor='username'>
+                  Username
+                </label>
+                <Field
+                  value={values?.username}
+                  className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none'
+                  type='text'
+                  name='username'
+                />
+                <ErrorMessage name='username' />
+                <label className='flex flex-col text-gray-400 py-2' htmlFor='email'>
+                  Email
+                </label>
+                <Field
+                  value={values?.email}
+                  className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none'
+                  type='email'
+                  name='email'
+                />
+                <ErrorMessage name='email' />
+                <label className='flex flex-col text-gray-400 py-2' htmlFor='password'>
+                  Password
+                </label>
+                <Field
+                  value={values?.password}
+                  className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none'
+                  type='password'
+                  name='password'
+                />
+                <ErrorMessage name='password' />
+                {isRegister && (
+                  <>
+                    <label className='flex flex-col text-gray-400 py-2' htmlFor='picture'>
+                        Picture
+                      </label>
+                      <input
+                        className='rounded-lg bg-white-700 mt-2 p-2 focus:border-white-500 focus:bg-gray-500 focus:outline-none'
+                        type='file'
+                        name='picture'
+                        onChange={(event) => {
+                          setFieldValue('picture', event.currentTarget.files[0]); // Set it to the selected file directly
+                        }}
+                      />
+                      <ErrorMessage name='picture' />
+
+                  </>
+                )}
+                <button className='w-full my-5 py-2 bg-teal-500 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg' type='submit'>
+                  {isLogin ? 'Login' : 'Register'}
+                </button>
+                <button className='text-1xl dark:text-white font-bold text-center' type='button' onClick={() => setPageType(isLogin ? 'register' : 'login')}>
                   {isLogin ? 'Create an account' : 'Already have an account?'}
                 </button>
               </div>
-              {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+              {errorMessage && <div className='text-red-500'>{errorMessage}</div>}
             </div>
           </Form>
         )}
       </Formik>
     </div>
   );
-  
 };
 
 export default AuthForm;

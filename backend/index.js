@@ -55,7 +55,7 @@ const upload = multer({ storage });
 
 
 app.post('/auth/register', upload.single('picture'), register )
-app.post('/api/post', verifyToken, upload.single('picture'), createPost)
+app.post('/api/post/', verifyToken, upload.single('picture'), createPost)
 
 app.use('/auth', authRouter)
 app.use('/api', expressjwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256']})) // exp-jwt, is protecting the routes that have api 

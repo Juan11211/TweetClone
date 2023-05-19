@@ -1,13 +1,11 @@
 import express from 'express'
 import verifyToken from '../middleware/verifyToken.js';
 const postRouter = express.Router();
-import { createPost, deletePost, getAllPosts, getUserPosts, likePost, updatePost } from '../controllers/postController.js'
+import {  deletePost, getAllPosts, getUserPosts, likePost, updatePost } from '../controllers/postController.js'
 
 postRouter.get('/', verifyToken, getAllPosts)
 
 postRouter.get('/:id', verifyToken, getUserPosts)
-
-postRouter.post('/', verifyToken, createPost)
 
 postRouter.put('/:id/like', verifyToken, likePost)
 

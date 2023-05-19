@@ -25,7 +25,10 @@ const postSchema = new mongoose.Schema({
     comments: {
       type: Array, 
       default: []
-    }
+    },
+  likers: {
+    type: Array
+  }
 }, { timestamps: true });
 
 export default mongoose.model('Post', postSchema);

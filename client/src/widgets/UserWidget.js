@@ -6,8 +6,8 @@ import WidgetWrapper from '../components/WidgetWrapper';
 import FlexBetween from '../components/FlexBetween';
 import UserImage from '../components/UserImage';
 
-const UserWidget = ({ userId }) => {
-  const [user, setUser] = useState(null);
+const UserWidget = ({ userId, picturePath }) => {
+  const [user, setUser] = useState(null); // eslint-disable-next-line
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
@@ -33,7 +33,7 @@ const UserWidget = ({ userId }) => {
   {/* FIRST ROW */}
   <FlexBetween className="flex flex-col md:flex-row justify-between items-center pb-1.1 cursor-pointer" onClick={() => navigate(`/profile/${userId}`)}>
     <FlexBetween className="flex gap-1 mb-2 md:mb-0">
-      <UserImage  />
+      <UserImage  image={picturePath} />
       <div className='text-center'>
         <h4 className="text-lg ">
           {user?.firstName} {user?.lastName}

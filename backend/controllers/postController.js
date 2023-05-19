@@ -1,4 +1,5 @@
 import Post from "../models/Posts.js";
+import User from "../models/User.js";
 
 export const getAllPosts = async (req, res, next) => {
   try {
@@ -26,16 +27,16 @@ export const getUserPosts = async (req, res, next) => {
 
 export const createPost = async (req, res, next) => {
   try {
+    const user = await User.findById(req.auth.id); // Fetch the user object based on auth ID
+
     const post = new Post({
       tweet: req.body.tweet,
       picturePath: req.body.picturePath,
       user: req.auth.id,
       likes: {},
       comments: [],
-      userPicturePath: user.picturePath
-
+      userPicturePath: user.picturePath, // Use the user object's picturePath property
     });
-
     const savedPost = await post.save();
     res.status(201).json(savedPost);
   } catch (err) {
@@ -84,12 +85,18 @@ export const likePost = async (req, res, next) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    if (post.likers.includes(req.auth.id)) {
-      return res.status(400).json({ error: 'You already liked this post' });
+    const likerId = req.auth.id;
+
+    if (post.likers.includes(likerId)) {
+      // User already liked the post, so it's a dislike action
+      post.likes.delete(likerId); // Remove the like from the map
+      post.likers = post.likers.filter((liker) => liker !== likerId); // Remove liker from the array
+    } else {
+      // User is liking the post
+      post.likes.set(likerId, true); // Set the like value in the map
+      post.likers.push(likerId);
     }
 
-    post.likes += 1;
-    post.likers.push(req.auth.id);
     const updatedPost = await post.save();
 
     return res.status(200).json(updatedPost);
@@ -98,6 +105,8 @@ export const likePost = async (req, res, next) => {
     return res.status(500).json({ error: 'Server error' });
   }
 };
+
+
 
 
 
